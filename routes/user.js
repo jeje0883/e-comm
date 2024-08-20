@@ -16,6 +16,12 @@ router.post("/check-email", userController.checkEmailExists);
 // Route to check user details
 router.post("/details", verify, userController.getProfile);
 
+// Route to enroll user
+router.post("/enroll", verify, userController.enroll);
+
+// Route to get enrolled courses of user
+router.get("/get-enrollments", verify, userController.getEnrollments);
+
 
 
 module.exports = router;

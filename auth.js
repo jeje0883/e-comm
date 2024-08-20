@@ -27,7 +27,7 @@ module.exports.verify = (req, res, next) => {
 
 		jwt.verify(token, process.env.JWT_SECRET_KEY, function(err, decodedToken){
 			if (err) {
-				return res.send({
+				return res.status(403).send({
 					auth: "Failed",
 					message: err.message
 				});
@@ -59,6 +59,7 @@ module.exports.verifyAdmin = (req, res, next) => {
 module.exports.errorHandler = (err, req, res, next) => {
 	console.error(err);
 
+	const statusCode = err.status || 500;
 	const errorMessage = err.message || "Internal Server Error";
 
 	res.json({
