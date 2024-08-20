@@ -110,4 +110,4 @@ module.exports.activateCourse = (req, res) => {
 			
 		})
     	.catch(error => errorHandler(error, req, res));
-};
+}

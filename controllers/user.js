@@ -97,41 +97,6 @@ module.exports.checkEmailExists = (req, res) => {
 
 
 
-// module.exports.checkEmailExists = (req, res) => {
-//     const { email } = req.body;
-
-//     // Validate email format
-//     if (typeof req.body.email !== "string" || !req.body.email.includes("@")) {
-//         return res.status(400).json({ success: false, message: "Invalid email format" });
-//     }
-
-//     // Check if email exists in the database
-//     User.findOne({ email })
-//         .then(user => {
-//             if (user) {
-//                 // Email exists
-//                 return res.status(409).json({ success: true, message: "Email already exists" });
-//             } else {
-//                 // Email does not exist
-//                 return res.status(404).json({ success: false, message: "Email not found" });
-//             }
-//         })
-//         .catch(error => {
-//             errorHandler(error, req, res);
-//             return res.status(500).json({ success: false, message: "Internal server error" });
-//         });
-// };
-
-
-
-
-
-
-
-
-
-
-
 
 // View User Details
 module.exports.getProfile = (req, res) => {
