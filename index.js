@@ -1,41 +1,64 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
-const userRoutes = require("./routes/user")
-const courseRoutes = require("./routes/course")
-
+const passport = require('passport');
+const session = require('express-session');
+require('./passport')
 require('dotenv').config();
 
-const app = express();
-
-mongoose.connect(process.env.MONGODB_STRING);
-
-mongoose.connection.once('open', () => console.log('Now connected to MongoDB Atlas'));
-
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+//define env config
+port = process.env.PORT || 3000;
+mongodb = process.env.MONGODB_STRING;
 
 
+
+
+
+//setup middleware
 const corsOptions = {
-  //You can also customize the CORS options to meet your specific requirements.
-  //to update the origin of the request
-  origin: ['http://localhost:8000'], // Allow requests from this origin (The client's URL) the origin is in array form if there are multiple origins.
-  //methods: ['GET', 'POST'], // Allow only specified HTTP methods // optional only if you want to restrict the methods
-//allowedHeaders: ['Content-Type', 'Authorization'], // Allow only specified headers // optional only if you want to restrict the headers
-  credentials: true, // Allow credentials (e.g., cookies, authorization headers)
-  optionsSuccessStatus: 200 // Provides a status code to use for successful OPTIONS requests, since some legacy browsers (IE11, various SmartTVs) choke on 204.
+    origin: ['http://localhost:8000'], 
+    credentials: true, 
+    optionsSuccessStatus: 200 
 };
 
+
+//connect to MONGODB
+mongoose.connect(mongodb);
+mongoose.connection.once('open', () => console.log('Now connected to MongoDB Atlas'));
+
+
+//setup the server
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 app.use(cors(corsOptions));
+app.use(session({
+    secret: process.env.clientSecret,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// define and set up routes
+const cartRoutes = require("./routes/cartRoute");
+const orderRoutes = require("./routes/orderRoute");
+const productRoutes = require("./routes/productRoute");
+const userRoutes = require("./routes/userRoute");
+
+
+app.use("/cart", cartRoutes);
+app.use("/orders", orderRoutes);
+app.use("/products", productRoutes);
 app.use("/users", userRoutes);
-app.use("/courses", courseRoutes);
 
 
+//initialize the server
 if(require.main === module){
-  app.listen(process.env.PORT || 3000, () => {
-    console.log(`API is now online on port ${ process.env.PORT || 3000}`)
-  })
+	app.listen(port, () => {
+		console.log(`API is now online on port ${ port || 3000}`)
+	});
 }
 
 module.exports = {app, mongoose};
