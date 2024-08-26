@@ -1,0 +1,3 @@
+MONGODB_STRING="mongodb+srv://admin:admin1234@cluster0.iuf6v.mongodb.net/b460-to-do?retryWrites=true&w=majority"
+PORT=4000
+JWT_SECRET_KEY="CourseBookingAPI
