@@ -32,18 +32,10 @@ module.exports.getMyOrders = async (req, res) => {
 }
 
 
-module.exports.checkout = async (req, res) => {
-    try{
-
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-}
-
 
 module.exports.createOrder = async (req, res) => {
     try {
-        const userId = req.user.id; // Assuming userId is stored in req.userId after authentication
+        const userId = req.user.id;
 
         const { productsOrdered } = req.body;
 

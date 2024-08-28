@@ -117,8 +117,7 @@ module.exports.setAsAdmin = async (req, res) => {
         user.password = undefined;
         res.status(200).send({ updatedUser : user});
     } catch (error) {
-        //res.status(500).send({ error: 'Failed in Find', details: error.message });
-        return errorHandler(error, req, res);
+        res.status(500).send({ error: 'Failed in Find', details: error.message });
     }
 };
 
@@ -133,13 +132,12 @@ module.exports.updatePassword = async (req, res) => {
   
       res.status(200).send({ message: 'Password reset successfully' });
     } catch (error) {
-      //console.error(error);
-      //res.status(500).send({ message: 'Internal server error' });
-      return errorHandler(error, req, res);
+      console.error(error);
+      res.status(500).send({ message: 'Internal server error' });
     }
   };
 
-/*
+
 module.exports.checkEmailExists = (req, res) => {
 
     if(req.body.email.includes("@")){
@@ -159,6 +157,9 @@ module.exports.checkEmailExists = (req, res) => {
         res.status(400).send({message: "Invalid email format"}); // false - Invalid email
     }
 };
+
+
+
 
 
 module.exports.enroll = (req, res) => {
@@ -191,7 +192,12 @@ module.exports.enroll = (req, res) => {
 
 }
 
-
+//[SECTION] Activity: Get enrollments
+/*
+    Steps:
+    1. Use the mongoose method "find" to retrieve all enrollments for the logged in user
+    2. If no enrollments are found, return a 404 error. Else return a 200 status and the enrollment record
+*/
 module.exports.getEnrollments = (req, res) => {
     return Enrollment.find({userId : req.user.id})
         .then(enrollments => {
@@ -203,6 +209,25 @@ module.exports.getEnrollments = (req, res) => {
             });
         })
         .catch(error => errorHandler(error, req, res));
+};
+
+module.exports.updatePassword = async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const { id } = req.user; // Extracting user ID from the authorization header
+
+    // Hashing the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Updating the user's password in the database
+    await User.findByIdAndUpdate(id, { password: hashedPassword });
+
+    // Sending a success response
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 
@@ -227,6 +252,6 @@ module.exports.updateProfile = async (req, res) => {
     res.status(500).json({ message: 'Failed to update profile' });
   }
 }
-*/
+
 
 

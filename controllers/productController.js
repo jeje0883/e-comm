@@ -122,22 +122,14 @@ module.exports.searchByName =  async (req, res) => {
 module.exports.searchByPrice =  async (req, res) => {
     try {
 
-        // if (!req.body.minPrice ||!req.body.maxPrice) {
-        //     return res.status(400).send({ error: 'Both minPrice and maxPrice are required' });
-        // }
-
-        // if (!typeof minPrice === Number || !typeof maxPrice === Number) {
-        //     return res.status(400).send({ error: 'Both minPrice and maxPrice must be numbers' });
-        // }
-
-        // if (req.body.minPrice > req.body.maxPrice) {
-        //     return res.status(400).send({ error: 'Min price must be less than or equal to max price' });
-        // }
-
-
         const product = await Product.find({
             price: { $gte: req.body.minPrice, $lte: req.body.maxPrice }
         })
+
+        if (!product) {
+            return res.status(404).send({error: 'Product not found'});
+        }
+
         return res.status(200).send(product);
 
     } catch (err) {

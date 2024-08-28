@@ -15,11 +15,11 @@ router.patch("/:id/set-as-admin", verify, verifyAdmin, userController.setAsAdmin
 
 router.patch('/update-password', verify, userController.updatePassword);
 
-// router.post("/check-email", userController.checkEmailExists);
+router.post("/check-email", userController.checkEmailExists);
 
-// router.post("/enroll", verify, userController.enroll);
+router.post("/enroll", verify, userController.enroll);
 
-// router.get('/get-enrollments', verify, userController.getEnrollments);
+router.get('/get-enrollments', verify, userController.getEnrollments);
 
 
 //Google Login
@@ -30,6 +30,7 @@ router.get('/google',
 		}	
 	));
 
+
 //Callback for Google OAuth authentication
 router.get('/google/callback',
 		passport.authenticate('google', {
@@ -39,6 +40,7 @@ router.get('/google/callback',
 			res.redirect('/users/success')
 		}
 	);
+
 
 //Route for failed Google Oauth 
 router.get('/failed', (req, res) => {
@@ -52,6 +54,7 @@ router.get('/success', isLoggedIn, (req, res) => {
 	console.log(req.user)
 	res.send(`Welcome ${req.user.displayName}`)
 })
+
 
 //Google Logout
 router.get('/logout', (req, res) => {
@@ -67,8 +70,9 @@ router.get('/logout', (req, res) => {
 	})
 })
 
+
 //Mini Activities
-// router.put('/profile', verify, userController.updateProfile);
+router.put('/profile', verify, userController.updateProfile);
 
 
 module.exports = router;

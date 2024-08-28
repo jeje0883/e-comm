@@ -9,8 +9,8 @@ router.get('/all-orders', verify, verifyAdmin, orderController.getAllOrders);
 
 router.get('/my-orders', verify, orderController.getMyOrders);
 
-router.post('./checkout', verify, orderController.checkout);
+router.post('/checkout', verify, orderController.createOrder);
 
-router.post('/create-order', verify, orderController.createOrder);
+//router.post('/create-order', verify, orderController.createOrder);
 
 module.exports = router;
