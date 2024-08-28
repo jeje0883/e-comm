@@ -9,6 +9,7 @@ require('dotenv').config();
 //define env config
 port = process.env.PORT || 3000;
 mongodb = process.env.MONGODB_STRING;
+secret = process.env.clientSecret;
 
 
 
@@ -34,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors(corsOptions));
 app.use(session({
-    secret: process.env.clientSecret,
+    secret: secret,
     resave: false,
     saveUninitialized: false
 }));
