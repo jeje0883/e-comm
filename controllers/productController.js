@@ -71,7 +71,7 @@ module.exports.createProduct = async (req, res) => {
 module.exports.getAllProducts =  async (req, res) => {
     try {
         const products = await Product.find();
-        return res.status(200).send(products);
+        return res.status(200).send({products : products});
     } catch (err) {
         errorHandler(err, req, res);
     }
@@ -81,7 +81,7 @@ module.exports.getAllProducts =  async (req, res) => {
 module.exports.getActiveProducts =  async (req, res) => {
     try {
         const product = await Product.find({ isActive: true });
-        return res.status(200).send(product);
+        return res.status(200).send({product : product});
     } catch (err) {
         errorHandler(err, req, res);
     }
@@ -97,7 +97,7 @@ module.exports.getProductById =  async (req, res) => {
             return res.status(404).send({error: 'Product not found'});
         }
 
-        return res.status(200).send(product);
+        return res.status(200).send({product : product});
 
     } catch (err) {
         errorHandler(err, req, res);
@@ -161,7 +161,7 @@ module.exports.updateProduct =  async (req, res) => {
         return res.status(200).send({
             success: true,
             message: 'Product updated successfully',
-            //data: updatedProduct
+            products: updatedProduct
         });
 
     } catch (err) {
@@ -185,7 +185,7 @@ module.exports.activateProduct =  async (req, res) => {
             return res.status(200).send({
                 //success: false,
                 message: 'Product already active',
-                activateProduct: product
+                product: product
             });
         }
 
@@ -201,7 +201,7 @@ module.exports.activateProduct =  async (req, res) => {
         return res.status(200).send({
             success: true,
             message: 'Product activated successfully',
-            //data: updatedProduct
+            activateProduct: updatedProduct
         });
 
     } catch (err) {
@@ -239,7 +239,7 @@ module.exports.archiveProduct =  async (req, res) => {
     
             return res.status(200).send({
                 success: true,
-                message: 'Product archive successfully',
+                message: 'Product archived successfully',
                 //data: updatedProduct
             });
 

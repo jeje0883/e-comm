@@ -411,7 +411,6 @@ module.exports.clearCart = async (req, res) => {
 
 module.exports.getCart = async (req, res) => {
     try{
-        console.log("Getting Cart");
         const userId = req.user.id; // Extract userId from the authenticated user
 
         const cart = await Cart.findOne({userId : userId});

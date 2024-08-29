@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const User = require("../models/User");
+const Cart = require("../models/Cart");
 
 const auth = require("../auth");
 const { errorHandler } = auth;
@@ -31,6 +32,60 @@ module.exports.getMyOrders = async (req, res) => {
     }
 }
 
+
+module.exports.checkout = async (req, res) => {
+       console.log('Checkout');
+    try {
+        
+        //find the user
+        const userId = req.user.id;
+
+        console.log(userId);
+        //find user's cart
+        const cart = await Cart.findOne({ userId: userId});
+
+        //check if cart exists and has items to checkout
+        if (!cart) {
+            return res.status(404).send({
+                //success: false,
+                error: 'No cart found for this user'
+            });
+        }
+
+        if (cart.cartItems.length === 0) {
+        return res.status(404).send({
+            //sucess: false,
+            error: "No items to checkout"
+            });
+        }
+
+        //transfer the cart items to orders
+        const newOrder = new Order({
+            userId: userId,
+            productsOrdered: cart.cartItems,
+            totalPrice: cart.totalPrice 
+        });
+
+        await newOrder.save();
+
+        //clear the cart items
+        cart.cartItems = [];
+        cart.totalPrice = 0;
+
+        await cart.save();
+
+        return res.status(200).send({
+            //success: true,
+            message: "Order Successfully",
+            //orderId: newOrder._id
+
+        });
+
+
+    } catch (error) {
+        errorHandler(error, req, res);
+    }
+}
 
 
 module.exports.createOrder = async (req, res) => {
